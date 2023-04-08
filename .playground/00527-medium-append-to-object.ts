@@ -19,7 +19,13 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type AppendToObject<T, U, V> = any
+// type AppendToObject<T extends {}, U extends PropertyKey, V> = {
+//   [Property in keyof T | U]: Property extends keyof T ? T[Property] : V
+// }
+
+type AppendToObject<T extends {}, U extends PropertyKey, V> = T & {
+  [K in U]: V
+}
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -64,7 +70,12 @@ type testExpect3 = {
 type cases = [
   Expect<Equal<AppendToObject<test1, 'home', boolean>, testExpect1>>,
   Expect<Equal<AppendToObject<test2, 'home', 1>, testExpect2>>,
-  Expect<Equal<AppendToObject<test3, 'isMotherRussia', false | undefined>, testExpect3>>,
+  Expect<
+    Equal<
+      AppendToObject<test3, 'isMotherRussia', false | undefined>,
+      testExpect3
+    >
+  >,
 ]
 
 /* _____________ 다음 단계 _____________ */
