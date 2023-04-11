@@ -16,15 +16,43 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type BEM<B extends string, E extends string[], M extends string[]> = any
+// type BEM<
+//   B extends string,
+//   E extends string[],
+//   M extends string[],
+// > = `${B}${E extends never[] ? '' : '__'}${E extends never[]
+//   ? ''
+//   : E[number]}${M extends never[] ? '' : '--'}${M extends never[]
+//   ? ''
+//   : M[number]}`
+
+type BEM<
+  B extends string,
+  E extends string[],
+  M extends string[],
+> = `${B}${E extends never[] ? '' : `__${E[number]}`}${M extends never[]
+  ? ''
+  : `--${M[number]}`}`
+
+type Type = BEM<'btn', ['price'], []>
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
 type cases = [
   Expect<Equal<BEM<'btn', ['price'], []>, 'btn__price'>>,
-  Expect<Equal<BEM<'btn', ['price'], ['warning', 'success']>, 'btn__price--warning' | 'btn__price--success' >>,
-  Expect<Equal<BEM<'btn', [], ['small', 'medium', 'large']>, 'btn--small' | 'btn--medium' | 'btn--large' >>,
+  Expect<
+    Equal<
+      BEM<'btn', ['price'], ['warning', 'success']>,
+      'btn__price--warning' | 'btn__price--success'
+    >
+  >,
+  Expect<
+    Equal<
+      BEM<'btn', [], ['small', 'medium', 'large']>,
+      'btn--small' | 'btn--medium' | 'btn--large'
+    >
+  >,
 ]
 
 /* _____________ 다음 단계 _____________ */

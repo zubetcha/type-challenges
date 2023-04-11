@@ -19,12 +19,8 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-// type AppendToObject<T extends {}, U extends PropertyKey, V> = {
-//   [Property in keyof T | U]: Property extends keyof T ? T[Property] : V
-// }
-
-type AppendToObject<T extends {}, U extends PropertyKey, V> = T & {
-  [K in U]: V
+type AppendToObject<T extends {}, U extends PropertyKey, V> = {
+  [Property in keyof T | U]: Property extends keyof T ? T[Property] : V
 }
 
 /* _____________ 테스트 케이스 _____________ */
