@@ -36,7 +36,18 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type DeepReadonly<T> = any
+// Function과 {}
+// Function 타입이
+
+type DeepReadonly<T> = {
+  readonly [K in keyof T]: T[K] extends {}
+    ? T[K] extends Function
+      ? T[K]
+      : DeepReadonly<T[K]>
+    : T[K]
+}
+
+type Test = DeepReadonly<{ a: 1; b: 'b'; c: { d: null } }>
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -47,6 +58,7 @@ type cases = [
 ]
 
 type X1 = {
+  arr: string[]
   a: () => 22
   b: string
   c: {
@@ -72,6 +84,7 @@ type X1 = {
 type X2 = { a: string } | { b: number }
 
 type Expected1 = {
+  readonly arr: readonly string[]
   readonly a: () => 22
   readonly b: string
   readonly c: {

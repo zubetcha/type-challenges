@@ -39,9 +39,17 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type Chainable = {
-  option(key: string, value: any): any
-  get(): any
+// type Chainable = {
+// option(key: string, value: any): { key: typeof value } &
+// get(): {}
+// }
+
+type Chainable<O = {}> = {
+  option<K extends string, V>(
+    key: K,
+    value: V,
+  ): Chainable<Omit<O, K> & { [P in K]: V }>
+  get(): O
 }
 
 /* _____________ 테스트 케이스 _____________ */
