@@ -18,7 +18,17 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type DropChar<S, C> = any
+type DropChar<
+  S extends string,
+  C extends string,
+> = S extends `${infer F}${infer R}` // ''
+  ? F extends C
+    ? DropChar<R, C> // tcha
+    : `${F}${DropChar<R, C>}` // FFFF...''
+  : S
+
+type Test = DropChar<'zubetcha', 't'>
+type Test2 = DropChar<'can su', 'su'>
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
