@@ -18,7 +18,17 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type Flatten = any
+type Flatten<A extends any[]> = A extends [infer First, ...infer Rest]
+  ? First extends any[]
+    ? [...Flatten<First>, ...Flatten<Rest>]
+    : [First, ...Flatten<Rest>]
+  : A
+
+// [[]]
+
+type Test = Flatten<[1, 2, [3, 4], [[[5]]]]>
+type Test2 = Flatten<[1, [[[5]]]]>
+type Test3 = Flatten<[[3, 4], [[[5]]]]>
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -28,7 +38,12 @@ type cases = [
   Expect<Equal<Flatten<[1, 2, 3, 4]>, [1, 2, 3, 4]>>,
   Expect<Equal<Flatten<[1, [2]]>, [1, 2]>>,
   Expect<Equal<Flatten<[1, 2, [3, 4], [[[5]]]]>, [1, 2, 3, 4, 5]>>,
-  Expect<Equal<Flatten<[{ foo: 'bar'; 2: 10 }, 'foobar']>, [{ foo: 'bar'; 2: 10 }, 'foobar']>>,
+  Expect<
+    Equal<
+      Flatten<[{ foo: 'bar'; 2: 10 }, 'foobar']>,
+      [{ foo: 'bar'; 2: 10 }, 'foobar']
+    >
+  >,
 ]
 
 /* _____________ 다음 단계 _____________ */

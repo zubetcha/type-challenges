@@ -20,7 +20,19 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type EndsWith<T extends string, U extends string> = any
+// type EndsWith<T extends string, U extends string> = T extends `${infer First}${U}`
+//   ? true
+//   : false
+
+// type EndsWith<T extends string, U extends string> = T extends `${any}${U}`
+//   ? true
+//   : false
+
+type EndsWith<T extends string, U extends string> = T extends `${string}${U}`
+  ? true
+  : false
+
+type Test = EndsWith<'abc', 'bc'>
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
