@@ -20,7 +20,15 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type IsUnion<T> = any
+type IsUnion<T, C = T> = [T] extends [never]
+  ? false
+  : T extends C
+  ? [C] extends [T]
+    ? false
+    : true
+  : never
+
+type Test = IsUnion<'a' | 'b' | 'c' | 'd'>
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
