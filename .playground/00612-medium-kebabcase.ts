@@ -24,7 +24,28 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type KebabCase<S> = any
+type KebabCase<S> = S extends `${infer F}${infer S}${infer R}`
+  ? S extends Lowercase<S>
+    ? `${Lowercase<F>}${KebabCase<`${S}${R}`>}`
+    : `${Lowercase<F>}${KebabCase<`-${Lowercase<S>}${R}`>}`
+  : S
+
+type RemoveDash<S> = S extends `${infer F}${infer R}`
+  ? F extends '-'
+    ? R
+    : S
+  : S
+
+// type KebabCase<S> = S extends `${...infer F}${infer R}`
+//   ? F extends Lowercase<F>
+//     ? `${F}${KebabCase<R>}`
+//     : `-${Lowercase<F>}${KebabCase<R>}`
+//   : RemoveDash<S>
+
+type Test = KebabCase<'FooBarBaz'>
+type Test2 = Uppercase<'😎'>
+type Test3 = Lowercase<'-'>
+type Test4 = Uppercase<'-'>
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
