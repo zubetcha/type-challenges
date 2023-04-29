@@ -24,10 +24,10 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type KebabCase<S> = S extends `${infer F}${infer S}${infer R}`
-  ? S extends Lowercase<S>
-    ? `${Lowercase<F>}${KebabCase<`${S}${R}`>}`
-    : `${Lowercase<F>}${KebabCase<`-${Lowercase<S>}${R}`>}`
+type KebabCase<S> = S extends `${infer First}${infer Second}${infer Rest}`
+  ? Second extends Lowercase<Second>
+    ? `${Lowercase<First>}${KebabCase<`${Second}${Rest}`>}`
+    : `${Lowercase<First>}${KebabCase<`-${Lowercase<Second>}${Rest}`>}`
   : S
 
 type RemoveDash<S> = S extends `${infer F}${infer R}`
