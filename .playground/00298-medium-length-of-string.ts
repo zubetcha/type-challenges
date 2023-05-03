@@ -41,6 +41,13 @@ type cases = [
   Expect<Equal<LengthOfString<'Sound! Euphonium'>, 16>>,
 ]
 
+type IsString<T> = T extends string ? true : 'false'
+type Test1 = IsString<0>
+
+type IsNever<T> = T[] extends never[] ? true : false
+
+type Test2 = IsNever<never>
+
 /* _____________ 다음 단계 _____________ */
 /*
   > 정답 공유하기: https://tsch.js.org/298/answer/ko
