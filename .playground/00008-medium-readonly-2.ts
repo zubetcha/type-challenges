@@ -32,7 +32,19 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type MyReadonly2<T, K> = any
+// type MyReadonly2<T, K extends keyof T = never> = K[] extends never[]
+//   ? { readonly [P in keyof T]: T[P] }
+//   : { readonly [P in K]: T[P] } & Omit<T, K>
+
+type MyReadonly2<T, K extends keyof T = never> = {
+  readonly [P in keyof T]: T[P]
+} & Omit<[K] extends [never] ? {} : T, K> // {readonly title, complete}
+
+// type MyReadonly2<T, K = never> = K
+
+type Test = MyReadonly2<Todo1>
+type Test2 = MyReadonly2<Todo1, 'title' | 'description'>
+type Test3 = MyReadonly2<Todo2, 'description'>
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Alike, Expect } from '@type-challenges/utils'
@@ -41,10 +53,9 @@ type cases = [
   Expect<Alike<MyReadonly2<Todo1>, Readonly<Todo1>>>,
   Expect<Alike<MyReadonly2<Todo1, 'title' | 'description'>, Expected>>,
   Expect<Alike<MyReadonly2<Todo2, 'title' | 'description'>, Expected>>,
-  Expect<Alike<MyReadonly2<Todo2, 'description' >, Expected>>,
+  Expect<Alike<MyReadonly2<Todo2, 'description'>, Expected>>,
 ]
 
-// @ts-expect-error
 type error = MyReadonly2<Todo1, 'title' | 'invalid'>
 
 interface Todo1 {

@@ -25,8 +25,12 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type Mutable<T> = any
+type Mutable<T extends {}> = {
+  -readonly [P in keyof T]: T[P]
+}
 
+type Test = Mutable<Readonly<Todo1>>
+type Test2 = Mutable<Readonly<List>>
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 

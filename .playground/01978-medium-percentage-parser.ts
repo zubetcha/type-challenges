@@ -32,7 +32,43 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type PercentageParser<A extends string> = any
+type FirstChar = '-' | '+' | ''
+type LastChar = '%' | ''
+
+type MySplit<
+  S extends string,
+  Array extends any[] = [],
+> = S extends `${infer F}${infer R}`
+  ? F extends ''
+    ? Array
+    : MySplit<R, [...Array, F]>
+  : Array
+
+type SplitTest = MySplit<'+100%'>
+
+// type PercentageParser<
+//   A extends string,
+//   S = '',
+//   Array extends any[] = ['', '', ''],
+// > = MySplit<A> extends [infer F, ...infer R] ? F extends '' ? Array : F extends FirstChar ? PercentageParser<R, S, [F, Array[1], Array[2]]>
+
+type ParseSign<T extends string> = T extends `${infer S}${any}`
+  ? S extends '+' | '-'
+    ? S
+    : ''
+  : ''
+type ParsePercent<T extends string> = T extends `${any}%` ? '%' : ''
+type ParseNumber<T extends string> =
+  T extends `${ParseSign<T>}${infer N}${ParsePercent<T>}` ? N : ''
+
+type PercentageParser<A extends string> = [
+  ParseSign<A>,
+  ParseNumber<A>,
+  ParsePercent<A>,
+]
+
+type Test = PercentageParser<'+1'>
+type Test2 = PercentageParser<'+100%'>
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

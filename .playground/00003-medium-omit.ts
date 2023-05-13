@@ -28,7 +28,11 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type MyOmit<T, K> = any
+type MyOmit<T extends {}, K extends keyof T> = {
+  [P in Exclude<keyof T, K>]: T[P]
+}
+
+type Test = MyOmit<Todo, 'description'>
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
