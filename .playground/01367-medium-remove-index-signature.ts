@@ -25,7 +25,19 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type RemoveIndexSignature<T> = any
+type TypeLiteralOnly<T> = string extends T
+  ? never
+  : number extends T
+  ? never
+  : symbol extends T
+  ? never
+  : T
+
+type RemoveIndexSignature<T extends {}> = {
+  [P in keyof T as TypeLiteralOnly<P>]: T[P]
+}
+type KeyTest = Exclude<keyof Foo, never>
+type Test = RemoveIndexSignature<FooBar>
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
