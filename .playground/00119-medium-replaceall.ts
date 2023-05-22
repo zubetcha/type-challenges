@@ -18,7 +18,17 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type ReplaceAll<S extends string, From extends string, To extends string> = any
+type ReplaceAll<
+  S extends string,
+  From extends string,
+  To extends string,
+> = S extends `${infer Head}${From}${infer Tail}`
+  ? From extends ''
+    ? S
+    : `${Head}${To}${ReplaceAll<Tail, From, To>}`
+  : S
+
+type Test = ReplaceAll<'foobarbar', 'bar', 'foo'>
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
