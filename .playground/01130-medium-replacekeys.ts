@@ -43,7 +43,12 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type ReplaceKeys<U, T, Y> = any
+// 1. 키가 T에도 있고 Y의 키에도 있다. Y[Key]
+// 2. 키가 T에는 있고 Y의 키에는 없다. never
+// 3. 키가 T에도 없고 Y의 키에도 없다. U[Key]
+type ReplaceKeys<U, T, Y> = {
+  [P in keyof U]: P extends keyof Y ? Y[P] : P extends T ? never : U[P]
+}
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -100,8 +105,18 @@ type Nodes = NodeA | NodeB | NodeC
 type ReplacedNodes = ReplacedNodeA | ReplacedNodeB | ReplacedNodeC
 type NodesNoName = NoNameNodeA | NoNameNodeC | NodeB
 
+type Test = ReplaceKeys<Nodes, 'name' | 'flag', { name: number; flag: string }>
+type TestA = ReplaceKeys<NodeA, 'name' | 'flag', { name: number; flag: string }>
+type TestB = ReplaceKeys<NodeB, 'name' | 'flag', { name: number; flag: string }>
+type TestC = ReplaceKeys<NodeC, 'name' | 'flag', { name: number; flag: string }>
+
 type cases = [
-  Expect<Equal<ReplaceKeys<Nodes, 'name' | 'flag', { name: number; flag: string }>, ReplacedNodes>>,
+  Expect<
+    Equal<
+      ReplaceKeys<Nodes, 'name' | 'flag', { name: number; flag: string }>,
+      ReplacedNodes
+    >
+  >,
   Expect<Equal<ReplaceKeys<Nodes, 'name', { aa: number }>, NodesNoName>>,
 ]
 

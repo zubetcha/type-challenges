@@ -28,6 +28,25 @@ type ReplaceAll<
     : `${Head}${To}${ReplaceAll<Tail, From, To>}`
   : S
 
+type CommonProps = { size: number }
+type OptionalProps = { value: number }
+
+type ToNever<T extends {}> = { [P in keyof T]: never }
+type CondionalProps<T, K, P extends {}> = T extends K ? P : ToNever<P>
+
+type AvaterProps<T> = CommonProps & CondionalProps<T, 'a', OptionalProps>
+
+// type ReplaceAll<
+//   S extends string,
+//   From extends string,
+//   To extends string,
+//   R extends string = '',
+// > = S extends `${infer Head}${From}${infer Tail}`
+//   ? S extends ''
+//     ? R
+//     : ReplaceAll<Tail, From, To, `${R}${Head}${To}`>
+//   : S
+
 type Test = ReplaceAll<'foobarbar', 'bar', 'foo'>
 
 /* _____________ 테스트 케이스 _____________ */
