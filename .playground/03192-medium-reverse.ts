@@ -19,7 +19,12 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type Reverse<T> = any
+type Reverse<T extends any[], Array extends any[] = []> = T extends [
+  ...infer Head,
+  infer Last,
+]
+  ? Reverse<Head, [...Array, Last]>
+  : Array
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

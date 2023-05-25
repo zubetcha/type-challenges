@@ -25,7 +25,7 @@
 
 /* _____________ 여기에 코드 입력 _____________ */
 
-type MyReturnType<T> = any
+type MyReturnType<T> = T extends (...args: any[]) => infer R ? R : never
 
 /* _____________ 테스트 케이스 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -46,8 +46,8 @@ type ComplexObject = {
   prev(): number
 }
 
-const fn = (v: boolean) => v ? 1 : 2
-const fn1 = (v: boolean, w: any) => v ? 1 : 2
+const fn = (v: boolean) => (v ? 1 : 2)
+const fn1 = (v: boolean, w: any) => (v ? 1 : 2)
 
 /* _____________ 다음 단계 _____________ */
 /*
